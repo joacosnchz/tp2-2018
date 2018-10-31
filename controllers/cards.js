@@ -3,8 +3,8 @@ require('./../models/card');
 var Card = mongoose.model('card');
 
 class CardsController {
-  getAll(callback) {
-    Card.find({}, callback);
+  getAll(filter, callback) {
+    Card.find(filter, callback);
   }
 
   getOne(id, callback) {
