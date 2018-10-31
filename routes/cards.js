@@ -11,7 +11,7 @@ router.get('/', (req, res, next) => {
     } else {
       res.json(cards);
     }
-  })
+  });
 });
 
 module.exports = router;
