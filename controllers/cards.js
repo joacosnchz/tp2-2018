@@ -16,12 +16,12 @@ class CardsController {
   }
 
   create(card, callback) {
-    let card = new Card({
+    let newCard = new Card({
       name: card.name,
       desc: card.desc
     });
 
-    card.save(callback);
+    newCard.save(callback);
   }
 
   edit(id, card, callback) {
