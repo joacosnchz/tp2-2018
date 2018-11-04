@@ -17,7 +17,8 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
   controller.create({
     name: req.body.name,
-    desc: req.body.desc
+    desc: req.body.desc,
+    idList: req.body.idList
   }, err => {
     if(err) {
       debug(err);

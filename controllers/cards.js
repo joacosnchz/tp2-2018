@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+require('./../models/list');
 require('./../models/card');
 var Card = mongoose.model('card');
 
@@ -18,7 +19,8 @@ class CardsController {
   create(card, callback) {
     let newCard = new Card({
       name: card.name,
-      desc: card.desc
+      desc: card.desc,
+      idList: card.idList
     });
 
     newCard.save(callback);
@@ -34,6 +36,7 @@ class CardsController {
         } else {
           oldCard.name = card.name;
           oldCard.desc = card.desc;
+          oldCard.idList = oldCard.idList;
 
           oldCard.save(callback);
         }
