@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+var cors = require('cors');
 
 var router = require('./routes');
 
@@ -22,6 +23,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 mongoose.connect('mongodb://127.0.0.1:27017/trello', { 
   useNewUrlParser: true 
 });
+
+app.use(cors());
 
 app.use('/', router);
 
