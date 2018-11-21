@@ -1,0 +1,6 @@
+There must be three collections created:
+- boards
+- lists
+- cards
+
+The data from the boards and lists collections should match with the data exported in this folder. the cards collection may be empty
