@@ -33,24 +33,32 @@ router.post('/', (req, res) => {
 });
 
 router.get('/:id/attachments', (req, res) => {
-  attachmentsController.getByCard(req.params.id, () => {
-    res.sendStatus(200);
+  attachmentsController.getByCard(req.params.id, (err, attachments) => {
+    if(err) {
+      res.sendStatus(500);
+    } else {
+      res.json(attachments);
+    }
   });
 });
 
 router.post('/:id/attachments', upload.single('file'), (req, res) => {
   attachmentsController.addToCard(req.params.id, req.file, (err) => {
     if(err) {
-      debug(err);
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
     }
-
-    res.sendStatus(200);
   })
 });
 
 router.delete('/:id_card/attachments/:id_attachment', (req, res) => {
-  attachmentsController.deleteFromCard(req.params.id_attachment, () => {
-    res.sendStatus(200);
+  attachmentsController.deleteFromCard(req.params.id_card, req.params.id_attachment, err => {
+    if(err) {
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
   });
 });
 

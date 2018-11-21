@@ -6,9 +6,19 @@ require('./../models/card');
 var Card = mongoose.model('card');
 
 class AttachmentsController {
+  constructor() {
+    this.endpoint = 'http://localhost:3000/';
+  }
 
   getByCard(id_card, callback) {
-    callback();
+    Card.findOne({_id: id_card}, (err, card) => {
+      if(err) {
+        debug(err);
+        callback(err);
+      } else {
+        callback(null, card.attachments);
+      }
+    })
   }
 
   addToCard(id_card, attachment, callback) {
@@ -33,7 +43,7 @@ class AttachmentsController {
                 callback(err);
               } else {
                 card.attachments.push({
-                  url: 'http://localhost:3000/' + relativePath,
+                  url: this.endpoint + relativePath,
                   name: attachment.filename
                 });
                 
@@ -53,8 +63,37 @@ class AttachmentsController {
     });
   }
 
-  deleteFromCard(id_attachment, callback) {
-    callback();
+  deleteFromCard(id_card, id_attachment, callback) {
+    Card.findOne({_id: id_card}, (err, card) => {
+      if(err) {
+        debug(err);
+        callback(err);
+      } else {
+        for(let i = card.attachments.length-1;i >= 0;i--) {
+          if(card.attachments[i]._id.toString() === id_attachment) {
+            let relativePath = card.attachments[i].url.replace(this.endpoint, '');
+
+            card.attachments.splice(i, 1);
+            card.save(err => {
+              if(err) {
+                debug(err);
+              } else {
+                let filePath = path.join(__dirname.replace('controllers', 'public'), relativePath);
+
+                fs.unlink(filePath, err => {
+                  if(err) {
+                    debug(err);
+                  }
+                });
+              }
+            });
+            break;
+          }
+        }
+
+        callback(null);
+      }
+    })
   }
 }
 
