@@ -3,12 +3,12 @@ var router = express.Router();
 var debug = require('debug')('trello:listsroutes');
 var controller = require('./../controllers/lists');
 
-router.get('/:id', (req, res) => {
+router.get('/:id/cards', (req, res) => {
     console.log(req.params)
     controller.getAllCardsByListId(req.params.id, (err, cards) => {
         if(err) {
             debug(err);
-            res.sendStatus(500);
+            res.status(500).send();
         } else {
             res.json(cards);
         }

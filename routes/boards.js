@@ -7,7 +7,7 @@ router.get('/:id', (req, res) => {
     controller.getOne(req.params.id, (err, board) => {
         if(err) {
             debug(err);
-            res.sendStatus(500);
+            res.status(500).send();
         } else {
             res.json(board);
         }

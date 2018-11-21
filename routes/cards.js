@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
   controller.getAll(req.query, (err, cards) => {
     if(err) {
       debug(err);
-      res.sendStatus(500);
+      res.status(500).send();
     } else {
       res.json(cards);
     }
@@ -25,9 +25,9 @@ router.post('/', (req, res) => {
   }, err => {
     if(err) {
       debug(err);
-      res.sendStatus(500);
+      res.status(500).send();
     } else {
-      res.sendStatus(200);
+      res.status(200).send();
     }
   });
 });
@@ -35,7 +35,7 @@ router.post('/', (req, res) => {
 router.get('/:id/attachments', (req, res) => {
   attachmentsController.getByCard(req.params.id, (err, attachments) => {
     if(err) {
-      res.sendStatus(500);
+      res.status(500).send();
     } else {
       res.json(attachments);
     }
@@ -45,9 +45,9 @@ router.get('/:id/attachments', (req, res) => {
 router.post('/:id/attachments', upload.single('file'), (req, res) => {
   attachmentsController.addToCard(req.params.id, req.file, (err) => {
     if(err) {
-      res.sendStatus(500);
+      res.status(500).send();
     } else {
-      res.sendStatus(200);
+      res.status(200).send();
     }
   })
 });
@@ -55,9 +55,9 @@ router.post('/:id/attachments', upload.single('file'), (req, res) => {
 router.delete('/:id_card/attachments/:id_attachment', (req, res) => {
   attachmentsController.deleteFromCard(req.params.id_card, req.params.id_attachment, err => {
     if(err) {
-      res.sendStatus(500);
+      res.status(500).send();
     } else {
-      res.sendStatus(200);
+      res.status(200).send();
     }
   });
 });
@@ -66,7 +66,7 @@ router.get('/:id', (req, res) => {
   controller.getOne(req.params.id, (err, card) => {
     if(err) {
       debug(err);
-      res.sendStatus(500);
+      res.status(500).send();
     } else {
       res.json(card);
     }
@@ -80,9 +80,9 @@ router.put('/:id', (req, res) => {
   }, err => {
     if(err) {
       debug(err);
-      res.sendStatus(500);
+      res.status(500).send();
     } else {
-      res.sendStatus(200);
+      res.status(200).send();
     }
   })
 });
@@ -91,9 +91,9 @@ router.delete('/:id', (req, res) => {
   controller.remove(req.params.id, err => {
     if(err) {
       debug(err);
-      res.sendStatus(500); 
+      res.status(500).send(); 
     } else {
-      res.sendStatus(200);
+      res.status(200).send();
     }
   })
 });
