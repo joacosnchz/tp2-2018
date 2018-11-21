@@ -10,4 +10,12 @@ var cardSchema = mongoose.Schema({
   }]
 });
 
+cardSchema.virtual('id').get(function(){
+  return this._id.toHexString();
+});
+
+cardSchema.set('toJSON', {
+  virtuals: true
+});
+
 mongoose.model('card', cardSchema);
