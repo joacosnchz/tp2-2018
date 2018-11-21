@@ -22,12 +22,12 @@ router.post('/', (req, res) => {
     name: req.body.name,
     desc: req.body.desc,
     idList: req.body.idList
-  }, err => {
+  }, (err, createdCard) => {
     if(err) {
       debug(err);
       res.status(500).send();
     } else {
-      res.status(200).send();
+      res.json(createdCard);
     }
   });
 });
@@ -76,7 +76,8 @@ router.get('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
   controller.edit(req.params.id, {
     name: req.body.name,
-    desc: req.body.desc
+    desc: req.body.desc,
+    idList: req.body.idList
   }, err => {
     if(err) {
       debug(err);

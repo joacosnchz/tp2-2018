@@ -87,11 +87,10 @@ class AttachmentsController {
                 });
               }
             });
+            callback(null);
             break;
           }
         }
-
-        callback(null);
       }
     })
   }

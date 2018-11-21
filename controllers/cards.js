@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var debug = require('debug')('trello:cardscontroller');
 require('./../models/list');
 require('./../models/card');
 var Card = mongoose.model('card');
@@ -37,7 +38,7 @@ class CardsController {
         } else {
           oldCard.name = card.name;
           oldCard.desc = card.desc;
-          oldCard.idList = oldCard.idList;
+          oldCard.idList = card.idList;
 
           oldCard.save(callback);
         }
