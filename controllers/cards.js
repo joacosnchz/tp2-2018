@@ -20,7 +20,8 @@ class CardsController {
     let newCard = new Card({
       name: card.name,
       desc: card.desc,
-      idList: card.idList
+      idList: card.idList,
+      attachments: new Array()
     });
 
     newCard.save(callback);

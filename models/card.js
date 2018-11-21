@@ -5,7 +5,8 @@ var cardSchema = mongoose.Schema({
   desc: String,
   idList: { type: 'ObjectId', ref: 'list' },
   attachments: [{
-    path: String
+    url: String,
+    name: String
   }]
 });
 

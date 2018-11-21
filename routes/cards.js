@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var debug = require('debug')('trello:cardsroutes');
 var controller = require('./../controllers/cards');
+var attachmentsController = require('./../controllers/attachments');
+var multer  = require('multer');
+var upload = multer({ dest: '/tmp/' });
 
 router.get('/', (req, res) => {
   controller.getAll(req.query, (err, cards) => {
@@ -22,6 +25,36 @@ router.post('/', (req, res) => {
   }, err => {
     if(err) {
       debug(err);
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
+router.get('/:id/attachments', (req, res) => {
+  attachmentsController.getByCard(req.params.id, (err, attachments) => {
+    if(err) {
+      res.sendStatus(500);
+    } else {
+      res.json(attachments);
+    }
+  });
+});
+
+router.post('/:id/attachments', upload.single('file'), (req, res) => {
+  attachmentsController.addToCard(req.params.id, req.file, (err) => {
+    if(err) {
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  })
+});
+
+router.delete('/:id_card/attachments/:id_attachment', (req, res) => {
+  attachmentsController.deleteFromCard(req.params.id_card, req.params.id_attachment, err => {
+    if(err) {
       res.sendStatus(500);
     } else {
       res.sendStatus(200);
