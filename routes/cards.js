@@ -38,9 +38,8 @@ router.get('/:id/attachments', (req, res) => {
   });
 });
 
-router.post('/:id/attachments', upload.fields([{name: 'file', maxCount: 1}]), (req, res) => {
-  debug(req.files);
-  attachmentsController.addAttachmentToCard(req.params.id, null, (err) => {
+router.post('/:id/attachments', upload.single('file'), (req, res) => {
+  attachmentsController.addToCard(req.params.id, req.file, (err) => {
     if(err) {
       debug(err);
     }
@@ -50,7 +49,7 @@ router.post('/:id/attachments', upload.fields([{name: 'file', maxCount: 1}]), (r
 });
 
 router.delete('/:id_card/attachments/:id_attachment', (req, res) => {
-  attachmentsController.deleteAttachmentFromCard(req.params.id_attachment, () => {
+  attachmentsController.deleteFromCard(req.params.id_attachment, () => {
     res.sendStatus(200);
   });
 });
