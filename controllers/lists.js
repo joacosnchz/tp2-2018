@@ -4,9 +4,14 @@ require('./../models/card');
 var Card = mongoose.model('card');
 
 class ListsController {
+
+  constructor(CardModel) {
+    this.Card = CardModel;
+  }
+
   getAllCardsByListId(idList, callback) {
-    Card.find({idList: idList}, callback);
+    this.Card.find({idList: idList}, callback);
   }
 }
 
-module.exports = new ListsController();
+module.exports = ListsController;
