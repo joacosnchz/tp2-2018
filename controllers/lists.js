@@ -1,12 +1,15 @@
 var mongoose = require('mongoose');
 require('./../models/list');
 require('./../models/card');
-var Card = mongoose.model('card');
 
 class ListsController {
 
   constructor(CardModel) {
-    this.Card = CardModel;
+    if(CardModel) {
+      this.Card = CardModel;
+    } else {
+      this.Card = mongoose.model('card');
+    }
   }
 
   getAllCardsByListId(idList, callback) {

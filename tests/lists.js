@@ -23,4 +23,17 @@ describe('ListsController tests', () => {
       done();
     });
   });
+
+  it('Should find all cards by list', done => {
+    let listsController = new ListsController(Card);
+
+    CardMock.expects('find').withArgs({idList: 'LIST'}).once().yields(null, 'RESULT');
+
+    listsController.getAllCardsByListId('LIST', (err, cards) => {
+      CardMock.verify(); // verifies expectations
+      CardMock.restore(); // restores all overriden methods and properties
+      assert.equal(cards, 'RESULT');
+      done();
+    });
+  });
 });
