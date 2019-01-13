@@ -4,7 +4,8 @@ require('../models/card');
 require('../models/board');
 var Card = mongoose.model('card');
 
-class BoardController {
+class BoardsController {
+
   constructor(Board, List) {
     if(Board) {
       this.Board = Board;
@@ -23,18 +24,13 @@ class BoardController {
     this.Board.findOne({_id: idBoard}, callback);
   }
 
-  getAllListsFromBoard(idBoard, callback) {
-    this.List.find({ idBoard: idBoard })
-      .then(lists => lists.map(list => list._id))
-      .then(listsIDs => callback(null, listsIDs))
-      .catch(err => callback(err, null));
+  getAllListIdsFromBoard(idBoard) {
+    return this.List.find({ idBoard: idBoard }).then(lists => lists.map(list => list._id));
   }
 
-  getAllCardsByListByBoardId(idBoard, callback) {
-    this.List.find({ idBoard: idBoard })
-      .then(lists => lists.map(list => list._id))
-      .then(listsIDs => Card.find({ idList: { $in: listsIDs } }, callback))
+  getAllCardsByLists(lists) {
+    return this.Card.find({ idList: { $in: listsIDs } });
   }
 }
 
-module.exports = BoardController;
+module.exports = BoardsController;

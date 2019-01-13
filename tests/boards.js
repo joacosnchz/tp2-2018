@@ -5,10 +5,14 @@ var BoardsController = require('./../controllers/boards');
 require('sinon-mongoose');
 require('./../models/board');
 require('./../models/list');
+var Board;
+var List;
 
 describe('BoardsController tests', () => {
-  var List = mongoose.model('list');
-  var Board = mongoose.model('board');
+  before(() => {
+    Board = mongoose.model('board');
+    List = mongoose.model('list');
+  });
 
   it('Should find one board by id', done => {
     let BoardMock = sinon.mock(Board);
@@ -23,13 +27,26 @@ describe('BoardsController tests', () => {
     });
   });
 
-  it('Should call find lists of a board', done => {
-    let spy = sinon.spy(List, "find");
+  it('Should call find lists of a board', () => {
+    let fake = sinon.fake.resolves([]);
+    sinon.replace(List, 'find', fake);
     let boardsController = new BoardsController(null, List);
 
-    boardsController.getAllListsFromBoard('BOARD', (err, lists) => {
-      List.find.restore();
-      assert.equal(spy.called, true);
+    boardsController.getAllListIdsFromBoard('BOARD');
+
+    sinon.restore();
+    assert.equal(fake.callCount, 1);
+  });
+
+  it('Should find list ids of a board', done => {
+    let ListMock = sinon.mock(List);
+    ListMock.expects('find').withArgs({idBoard: 'BOARD'}).once().resolves([]);
+    let boardsController = new BoardsController(null, List);
+
+    boardsController.getAllListIdsFromBoard('BOARD').then(lists => {
+      ListMock.verify();
+      ListMock.restore();
+      assert.equal(lists.length, 0);
       done();
     });
   });
