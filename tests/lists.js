@@ -4,20 +4,23 @@ var mongoose = require('mongoose');
 var ListsController = require('./../controllers/lists');
 require('sinon-mongoose');
 require('./../models/card');
+var Card;
 
 describe('ListsController tests', () => {
-  var Card = mongoose.model('card');
 
-  it('Should call find on cards model', done => {
-    let spi = sinon.spy(Card, "find");
+  before(() => {
+    Card = mongoose.model('card');
+  });
+
+  it('Should call find cards by list', () => {
+    let fake = sinon.fake.yields(null, 'RESULT');
+    sinon.replace(Card, 'find', fake);
     let listsController = new ListsController(Card);
 
-    listsController.getAllCardsByListId('LIST', (err, cards) => {
-      Card.find.restore();
-      
-      assert.equal(spi.called, true);
-      done();
-    });
+    listsController.getAllCardsByListId('LIST', () => {});
+
+    sinon.restore();
+    assert.equal(fake.callCount, 1);
   });
 
   it('Should find all cards by list', done => {
@@ -46,6 +49,30 @@ describe('ListsController tests', () => {
       CardMock.restore();
 
       assert.equal(err, 'ERROR');
+      done();
+    });
+  });
+
+  it('Should call find cards of list array', () => {
+    let fake = sinon.fake.resolves([]);
+    sinon.replace(Card, 'find', fake);
+    let listsController = new ListsController(Card);
+
+    listsController.getAllCardsInLists('LISTS');
+
+    sinon.restore();
+    assert.equal(fake.callCount, 1);
+  });
+
+  it('Should find cards of list array', done => {
+    let CardMock = sinon.mock(Card);
+    CardMock.expects('find').withArgs({idList: {$in: "LISTS"}}).once().resolves('RESULT');
+    let listsController = new ListsController(Card);
+
+    listsController.getAllCardsInLists("LISTS").then(cards => {
+      CardMock.verify();
+      CardMock.restore();
+      assert.equal(cards, 'RESULT');
       done();
     });
   });

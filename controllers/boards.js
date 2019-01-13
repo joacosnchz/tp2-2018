@@ -27,10 +27,6 @@ class BoardsController {
   getAllListIdsFromBoard(idBoard) {
     return this.List.find({ idBoard: idBoard }).then(lists => lists.map(list => list._id));
   }
-
-  getAllCardsByLists(lists) {
-    return this.Card.find({ idList: { $in: listsIDs } });
-  }
 }
 
 module.exports = BoardsController;

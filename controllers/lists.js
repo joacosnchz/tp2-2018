@@ -15,6 +15,10 @@ class ListsController {
   getAllCardsByListId(idList, callback) {
     this.Card.find({idList: idList}, callback);
   }
+
+  getAllCardsInLists(lists) {
+    return this.Card.find({ idList: { $in: lists } });
+  }
 }
 
 module.exports = ListsController;
