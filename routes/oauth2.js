@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var OAuth2 = require('./../controllers/oauth2');
+var passport = require('passport');
 
-router.get('/authorize', (req, res) => {
+router.post('/authorize', passport.authenticate('local'), (req, res) => {
   let oauth2Controller = new OAuth2();
 
-  oauth2Controller.generateAuthorization(req.headers).then(auth => {
+  oauth2Controller.generateAuthorization().then(auth => {
     res.send(auth);
   });
 });

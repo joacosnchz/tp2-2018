@@ -5,6 +5,32 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var cors = require('cors');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var UsersController = require('./controllers/users');
+let usersController = new UsersController();
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    usersController.login(username, password).then(user => {
+      done(null, user);
+    }).catch(err => {
+      done(err, false);
+    });
+  }
+));
+
+passport.serializeUser(function(user, cb) {
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  usersController.findOneById(id).then(user => {
+    cb(null, user);
+  }).catch(err => {
+    cb(err);
+  });
+});
 
 var router = require('./routes');
 
@@ -19,6 +45,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 mongoose.connect('mongodb://127.0.0.1:27017/trello', { 
   useNewUrlParser: true 

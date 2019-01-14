@@ -1,16 +1,6 @@
 class OAuth2 {
-  generateAuthorization(headers) {
-    let credentialsBase64 = headers.authorization.replace('Basic ', '');
-    let credentialsStr = new Buffer(credentialsBase64, 'base64').toString('ascii');
-    let credentialsSplitted = credentialsStr.split(':');
-    let username = credentialsSplitted[0];
-    let password = credentialsSplitted[1];
-
-    if(username === 'hola' && password === 'hola') {
-      return Promise.resolve('123');
-    } else {
-      return Promise.reject('Authentication error');
-    }    
+  generateAuthorization() {
+    return Promise.resolve('123');
   }
 
   generateAccessToken(headers) {
