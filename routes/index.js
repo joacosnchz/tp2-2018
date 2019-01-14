@@ -5,12 +5,10 @@ var lists = require('./lists');
 var boards = require('./boards');
 var oauth2 = require('./oauth2');
 var root = require('./root');
-var Auth = require('./../controllers/oauth2');
-let auth = new Auth();
+var passport = require('passport');
 
-router.use('/', root);
 router.use('/oauth2', oauth2);
-//router.use(auth.authenticate);
+router.use('/', root);
 router.use('/cards', cards);
 router.use('/lists', lists);
 router.use('/boards', boards);

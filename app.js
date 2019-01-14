@@ -7,8 +7,33 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var BearerStrategy = require('passport-http-bearer').Strategy;
+var CustomStrategy = require('passport-custom');
 var UsersController = require('./controllers/users');
 let usersController = new UsersController();
+var OAuth2 = require('./controllers/oauth2');
+let oauth2 = new OAuth2();
+
+passport.use('token', new CustomStrategy(
+  function(req, done) {
+    oauth2.authenticate(req.query.accessToken).then(() => {
+      req.query.accessToken = null;
+      done(null, {id: '234'});
+    }).catch(err => {
+      done(err, false);
+    });
+  }
+));
+
+passport.use(new BearerStrategy(
+  function(authorization, done) {
+    oauth2.authorize(authorization).then(() => {
+      done(null, {id:'123'});
+    }).catch(err => {
+      done(err, false);
+    });
+  }
+));
 
 passport.use(new LocalStrategy(
   function(username, password, done) {

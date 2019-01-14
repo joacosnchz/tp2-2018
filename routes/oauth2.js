@@ -11,11 +11,11 @@ router.post('/authorize', passport.authenticate('local'), (req, res) => {
   });
 });
 
-router.get('/token', (req, res) => {
+router.post('/token', passport.authenticate('bearer'), (req, res) => {
   let oauth2Controller = new OAuth2();
 
-  oauth2Controller.generateAccessToken(req.headers).then(at => {
-    res.send('234');
+  oauth2Controller.generateAccessToken().then(at => {
+    res.send(at);
   });
 });
 

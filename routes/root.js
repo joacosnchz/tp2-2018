@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var UsersController = require('./../controllers/users');
+var passport = require('passport');
 
 router.post('/register', (req, res) => {
   let usersController = new UsersController();
@@ -22,5 +23,7 @@ router.post('/login', (req, res) => {
     res.sendStatus(500);
   }); 
 });
+
+router.use(passport.authenticate('token'));
 
 module.exports = router;
