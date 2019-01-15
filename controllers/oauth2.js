@@ -1,20 +1,23 @@
+var jwt = require('jsonwebtoken');
+var config = require('config');
+var moment = require('moment');
+
+/* 
+* Using Implicit Grant Type described in: https://tools.ietf.org/html/rfc6749#section-1.3.2
+*/
 class OAuth2 {
-  generateAuthorization() {
-    // save it to database and give it 30 seconds of expiration time
-    return Promise.resolve('123');
-  }
-
-  authorize(auth) {
-    // check if is not expired and if its correct
-    if(auth === '123') {
-      return Promise.resolve();
-    } else {
-      return Promise.reject('Authorization not found');
-    }
-  }
-
   generateAccessToken() {
-    return Promise.resolve('234');
+    // E HH:mm:ss:SSS day week and exact time with fractions of seconds
+    let accessToken = jwt.sign({at: moment().format('EHHmmssSSS')}, config.get('jwtSecret'));
+    let refreshToken = jwt.sign({rt: moment().format('EHHmmssSSS')}, config.get('jwtSecret'));
+    let expires = moment().add({hours: 1});
+
+    let res = {
+      accessToken: accessToken,
+      refreshToken: refreshToken
+    };
+
+    return Promise.resolve(res);
   }
 
   refreshAccessToken(refresh) {

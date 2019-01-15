@@ -6,11 +6,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var cors = require('cors');
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var BearerStrategy = require('passport-http-bearer').Strategy;
 var CustomStrategy = require('passport-custom');
-var UsersController = require('./controllers/users');
-let usersController = new UsersController();
 var OAuth2 = require('./controllers/oauth2');
 let oauth2 = new OAuth2();
 
@@ -25,36 +21,12 @@ passport.use('token', new CustomStrategy(
   }
 ));
 
-passport.use(new BearerStrategy(
-  function(authorization, done) {
-    oauth2.authorize(authorization).then(() => {
-      done(null, {id:'123'});
-    }).catch(err => {
-      done(err, false);
-    });
-  }
-));
-
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    usersController.login(username, password).then(user => {
-      done(null, user);
-    }).catch(err => {
-      done(err, false);
-    });
-  }
-));
-
 passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
+  cb(null, user);
 });
 
-passport.deserializeUser(function(id, cb) {
-  usersController.findOneById(id).then(user => {
-    cb(null, user);
-  }).catch(err => {
-    cb(err);
-  });
+passport.deserializeUser(function(user, cb) {
+  cb(null, user);
 });
 
 var router = require('./routes');

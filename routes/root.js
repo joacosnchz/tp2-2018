@@ -1,27 +1,14 @@
 var express = require('express');
 var router = express.Router();
-var UsersController = require('./../controllers/users');
+var OAuth2 = require('../controllers/oauth2');
 var passport = require('passport');
 
-router.post('/register', (req, res) => {
-  let usersController = new UsersController();
+router.get('/oauth2/token', (req, res) => {
+  let oauth2Controller = new OAuth2();
 
-  usersController.register(req.body.username, req.body.password).then((user) => {
-    user.password = '';
-    res.json(user);
-  }).catch(err => {
-    res.sendStatus(500);
+  oauth2Controller.generateAccessToken().then(data => {
+    res.json(data);
   });
-});
-
-router.post('/login', (req, res) => {
-  let usersController = new UsersController();
-
-  usersController.login(req.body.username, req.body.password).then(user => {
-    res.json(user);
-  }).catch(err => {
-    res.sendStatus(500);
-  }); 
 });
 
 router.use(passport.authenticate('token'));
