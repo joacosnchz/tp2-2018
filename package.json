@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha ./tests"
+    "test": "nyc mocha ./tests",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
     "bcrypt": "^3.0.3",
@@ -27,5 +28,9 @@
     "passport-local": "^1.0.0",
     "sinon": "^7.2.2",
     "sinon-mongoose": "^2.2.1"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "nyc": "^13.1.0"
   }
 }
