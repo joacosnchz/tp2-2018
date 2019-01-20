@@ -23,7 +23,11 @@ passport.use(new LocalStrategy(
     usersController.login(username, password).then(user => {
       done(null, user);
     }).catch(err => {
-      done(err, false);
+      debug(err);
+      done({
+        message: err,
+        status: 401
+      }, false);
     });
   }
 ));
@@ -33,7 +37,11 @@ passport.use(new BearerStrategy(
     usersController.findOneById(authorization).then(user => {
       done(null, user);
     }).catch(err => {
-      done(err, false);
+      debug(err);
+      done({
+        message: err,
+        status: 401
+      }, false);
     });
   }
 ));
@@ -44,7 +52,11 @@ passport.use('token', new CustomStrategy(
       req.query.accessToken = null;
       done(null, user);
     }).catch(err => {
-      done(err, false);
+      debug(err);
+      done({
+        message: err,
+        status: 401
+      }, false);
     });
   }
 ));

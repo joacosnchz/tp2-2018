@@ -68,9 +68,6 @@ class OAuth2 {
       } else {
         return Promise.reject('Access Token not found');
       }
-    }).catch(err => {
-      debug(err);
-      return Promise.reject('Error accessing access tokens database');
     });
   }
 }

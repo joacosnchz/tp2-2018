@@ -10,6 +10,7 @@ router.post('/token', passport.authenticate('local'), (req, res) => {
     oauth2Controller.generateAccessToken().then(data => {
       res.json(data);
     }).catch(err => {
+      console.log('err');
       res.sendStatus(500);
     });
   } else {

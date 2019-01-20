@@ -22,7 +22,7 @@ class UsersController {
   login(username, password) {
     return User.findOne({username: username}).then(user => {
       if(!user) {
-        return Promise.reject(err);
+        return Promise.reject('No user found');
       } else {
         return bcrypt.compare(password, user.password).then(res => {
           if(res) {
@@ -31,14 +31,8 @@ class UsersController {
           } else {
             return Promise.reject('Wrong password');
           }
-        }).catch(err => {
-          debug(err);
-          return Promise.reject(err);
-        });
+        })
       }
-    }).catch(err => {
-      debug(err);
-      return Promise.reject(err);
     });
   }
 
