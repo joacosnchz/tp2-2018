@@ -2,3 +2,4 @@
 /public/uploads/
 /config/
 *.DS_Store
+/.nyc_output/
