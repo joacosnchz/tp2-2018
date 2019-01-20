@@ -5,14 +5,29 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var cors = require('cors');
+var debug = require('debug')('trello:app');
 var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var CustomStrategy = require('passport-custom');
 var OAuth2 = require('./controllers/oauth2');
 let oauth2 = new OAuth2();
+var UsersController = require('./controllers/users');
+let usersController = new UsersController();
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    usersController.login(username, password).then(user => {
+      done(null, user);
+    }).catch(err => {
+      done(err, false);
+    });
+  }
+));
 
 passport.use('token', new CustomStrategy(
   function(req, done) {
-    oauth2.authenticate(req.query.accessToken).then(() => {
+    oauth2.authenticate(req.query.accessToken).then((res) => {
+      debug('Something here: ' + res);
       req.query.accessToken = null;
       done(null, {id: '234'});
     }).catch(err => {
