@@ -4,7 +4,7 @@ var accessTokenSchema = mongoose.Schema({
   accessToken: String,
   refreshToken: String,
   expiresAt: Date,
-  valid: Boolean
+  valid: Boolean // is valid when refresh token has not been used
 });
 
 mongoose.model('accesstoken', accessTokenSchema);

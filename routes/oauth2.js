@@ -3,7 +3,7 @@ var router = express.Router();
 var OAuth2 = require('../controllers/oauth2');
 var passport = require('passport');
 
-router.post('/oauth2/token', passport.authenticate('local'), (req, res) => {
+router.post('/token', passport.authenticate('local'), (req, res) => {
   if(req.body.grant_type === 'password') {
     let oauth2Controller = new OAuth2();
 
@@ -17,14 +17,18 @@ router.post('/oauth2/token', passport.authenticate('local'), (req, res) => {
   }
 });
 
-router.get('/oauth2/refresh', (req, res) => {
+router.post('/refresh', (req, res) => {
   if(req.body.grant_type === 'refresh_token') {
     let oauth2Controller = new OAuth2();
+
+    oauth2Controller.refreshAccessToken(req.body.refresh_token).then(data => {
+      res.json(data);
+    }).catch(err => {
+      res.sendStatus(500);
+    });
   } else {
     res.sendStatus(401);
   }
 });
-
-router.use(passport.authenticate('token'));
 
 module.exports = router;

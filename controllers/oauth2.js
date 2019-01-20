@@ -42,7 +42,19 @@ class OAuth2 {
   }
 
   refreshAccessToken(refresh) {
-    
+    return AccessToken.findOne({refreshToken: refresh}).then(accessToken => {
+      if(accessToken && accessToken.valid) {
+        accessToken.valid = false;
+        accessToken.save();
+
+        return this.generateAccessToken();
+      } else {
+        return Promise.reject('Access token not found');
+      }
+    }).catch(err => {
+      debug(err);
+      return Promise.reject('Error accessing access tokens database');
+    });
   }
 
   authenticate(token) {
