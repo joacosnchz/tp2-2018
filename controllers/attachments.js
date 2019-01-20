@@ -6,8 +6,16 @@ require('./../models/card');
 var Card = mongoose.model('card');
 
 class AttachmentsController {
-  constructor() {
+  constructor(CardModel, FileSys) {
     this.endpoint = 'http://localhost:3000/';
+
+    if(CardModel) {
+      Card = CardModel;
+    }
+
+    if(FileSys) {
+      fs = FileSys;
+    }
   }
 
   getByCard(id_card, callback) {
@@ -84,16 +92,18 @@ class AttachmentsController {
                   if(err) {
                     debug(err);
                   }
+
+                  callback(null);
                 });
               }
             });
-            callback(null);
-            break;
+            return; // does not allow the control to arrive the callback outside the forloop
           }
         }
+        callback(null); // only arrives here if no attachment is found
       }
     })
   }
 }
 
-module.exports = new AttachmentsController();
+module.exports = AttachmentsController;

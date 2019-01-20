@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 require('../models/list');
 require('../models/card');
 require('../models/board');
-var Card = mongoose.model('card');
 
 class BoardsController {
 

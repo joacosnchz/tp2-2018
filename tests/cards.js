@@ -4,13 +4,9 @@ var mongoose = require('mongoose');
 var CardsController = require('./../controllers/cards');
 require('sinon-mongoose');
 require('./../models/card');
-var Card;
+var Card = mongoose.model('card');
 
 describe('CardsController tests', () => {
-  before(() => {
-    Card = mongoose.model('card');
-  });
-
   it('Should call find all cards', () => {
     let fake = sinon.fake();
     sinon.replace(Card, 'find', fake);
