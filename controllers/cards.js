@@ -2,23 +2,30 @@ var mongoose = require('mongoose');
 var debug = require('debug')('trello:cardscontroller');
 require('./../models/list');
 require('./../models/card');
-var Card = mongoose.model('card');
 
 class CardsController {
+  constructor(CardModel) {
+    if(CardModel) {
+      this.Card = CardModel;
+    } else {
+      this.Card = mongoose.model('card');
+    }
+  }
+
   getAll(filter, callback) {
-    Card.find(filter, callback);
+    this.Card.find(filter, callback);
   }
 
   getOne(id, callback) {
-    Card.findOne({_id: id}, callback);
+    this.Card.findOne({_id: id}, callback);
   }
 
   remove(id, callback) {
-    Card.remove({_id: id}, callback);
+    this.Card.remove({_id: id}, callback);
   }
 
   create(card, callback) {
-    let newCard = new Card({
+    let newCard = new this.Card({
       name: card.name,
       desc: card.desc,
       idList: card.idList,
@@ -29,22 +36,14 @@ class CardsController {
   }
 
   edit(id, card, callback) {
-    Card.findOne({_id: id}, (err, oldCard) => {
-      if(err) {
-        callback(err);
-      } else {
-        if(!oldCard) {
-          callback('Card not found');
-        } else {
-          oldCard.name = card.name;
-          oldCard.desc = card.desc;
-          oldCard.idList = card.idList;
-
-          oldCard.save(callback);
-        }
+    this.Card.update({_id: id}, {
+      $set: {
+        name: card.name,
+        desc: card.desc,
+        idList: card.idList
       }
-    })
+    }, callback);
   }
 }
 
-module.exports = new CardsController();
+module.exports = CardsController;
