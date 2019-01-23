@@ -85,17 +85,16 @@ describe('CardsController tests', () => {
   });
 
   it('Should call save card', () => {
-    let card = new Card();
-    let fake = sinon.fake();
-    sinon.replaceGetter(card, 'name', fake);
-    sinon.replaceGetter(card, 'desc', fake);
-    sinon.replaceGetter(card, 'idList', fake);
+    let saveFake = sinon.fake();
+    let Card = function() {
+      this.save = saveFake;
+    }
     let cardsController = new CardsController(Card);
 
-    cardsController.create(card, () => {});
+    cardsController.create({name: '', desc: '', idList: ''}, () => {});
 
     sinon.restore();
-    assert.equal(fake.callCount, 3);
+    assert.equal(saveFake.callCount, 1);
   });
 
   it('Should call update card', () => {
