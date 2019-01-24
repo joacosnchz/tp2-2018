@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var OAuth2 = require('../controllers/oauth2');
 var passport = require('passport');
+var debug = require('debug')('trello:oauth2router');
 
 router.post('/token', passport.authenticate('local'), (req, res) => {
   if(req.body.grant_type === 'password') {
@@ -10,7 +11,7 @@ router.post('/token', passport.authenticate('local'), (req, res) => {
     oauth2Controller.generateAccessToken().then(data => {
       res.json(data);
     }).catch(err => {
-      console.log('err');
+      debug(err);
       res.sendStatus(500);
     });
   } else {
@@ -25,6 +26,7 @@ router.post('/refresh', (req, res) => {
     oauth2Controller.refreshAccessToken(req.body.refresh_token).then(data => {
       res.json(data);
     }).catch(err => {
+      debug(err);
       res.sendStatus(500);
     });
   } else {

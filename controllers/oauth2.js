@@ -11,6 +11,16 @@ var AccessToken = mongoose.model('accesstoken');
 * and detailed in: https://tools.ietf.org/html/rfc6749#section-4.3 
 */
 class OAuth2 {
+  constructor(AccessTokenModel, jwtDep) {
+    if(AccessTokenModel) {
+      AccessToken = AccessTokenModel;
+    }
+
+    if(jwtDep) {
+      jwt = jwtDep;
+    }
+  }
+  
   generateAccessToken() {
     let expires_in = 3600;
 
@@ -35,9 +45,6 @@ class OAuth2 {
 
     return createdTokens.save().then(() => {
       return Promise.resolve(res);
-    }).catch(err => {
-      debug(err);
-      return Promise.reject(err);
     });
   }
 
@@ -51,9 +58,6 @@ class OAuth2 {
       } else {
         return Promise.reject('Access token not found');
       }
-    }).catch(err => {
-      debug(err);
-      return Promise.reject('Error accessing access tokens database');
     });
   }
 
