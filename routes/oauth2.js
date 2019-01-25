@@ -23,8 +23,10 @@ router.post('/refresh', (req, res) => {
   if(req.body.grant_type === 'refresh_token') {
     let oauth2Controller = new OAuth2();
 
-    oauth2Controller.refreshAccessToken(req.body.refresh_token).then(data => {
-      res.json(data);
+    oauth2Controller.validateRefreshToken(req.body.refresh_token).then(() => {
+      oauth2Controller.generateAccessToken().then(data => {
+        res.json(data);
+      });
     }).catch(err => {
       debug(err);
       res.sendStatus(500);

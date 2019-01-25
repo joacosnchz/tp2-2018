@@ -48,13 +48,11 @@ class OAuth2 {
     });
   }
 
-  refreshAccessToken(refresh) {
+  validateRefreshToken(refresh) {
     return AccessToken.findOne({refreshToken: refresh}).then(accessToken => {
       if(accessToken && accessToken.valid) {
         accessToken.valid = false;
-        accessToken.save();
-
-        return this.generateAccessToken();
+        return accessToken.save();
       } else {
         return Promise.reject('Access token not found');
       }

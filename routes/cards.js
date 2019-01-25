@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var debug = require('debug')('trello:cardsroutes');
-var controller = require('./../controllers/cards');
+var CardsController = require('./../controllers/cards');
 var AttachmentsController = require('./../controllers/attachments');
 var multer  = require('multer');
 var upload = multer({ dest: '/tmp/' });
 
 router.get('/', (req, res) => {
+  let controller = new CardsController();
   controller.getAll(req.query, (err, cards) => {
     if(err) {
       debug(err);
@@ -18,6 +19,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+  let controller = new CardsController();
   controller.create({
     name: req.body.name,
     desc: req.body.desc,
@@ -66,6 +68,7 @@ router.delete('/:id_card/attachments/:id_attachment', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+  let controller = new CardsController();
   controller.getOne(req.params.id, (err, card) => {
     if(err) {
       debug(err);
@@ -77,6 +80,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
+  let controller = new CardsController();
   controller.edit(req.params.id, {
     name: req.body.name,
     desc: req.body.desc,
@@ -92,6 +96,7 @@ router.put('/:id', (req, res) => {
 });
 
 router.delete('/:id', (req, res) => {
+  let controller = new CardsController();
   controller.remove(req.params.id, err => {
     if(err) {
       debug(err);
