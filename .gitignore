@@ -1,5 +1,6 @@
 /node_modules/
 /public/uploads/
-/config/
+/config/development.json
+/config/production.json
 *.DS_Store
 /.nyc_output/
