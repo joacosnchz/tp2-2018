@@ -22,7 +22,7 @@ class AttachmentsController {
     Card.findOne({_id: id_card}, (err, card) => {
       if(err) {
         debug(err);
-        callback(err);
+        callback('Cannot find card');
       } else {
         callback(null, card.attachments);
       }
@@ -33,7 +33,7 @@ class AttachmentsController {
     fs.readFile(attachment.path, (err, data) => {
       if(err) {
         debug(err);
-        callback(err);
+        callback('Cannot read attachment file');
       } else {
         let originalnameParts = attachment.originalname.split('.');
         let extension = originalnameParts[originalnameParts.length-1];
@@ -43,12 +43,12 @@ class AttachmentsController {
         fs.writeFile(filePath, data, err => {
           if(err) {
             debug(err);
-            callback(err);
+            callback('Cannot write attachment file');
           } else {
             Card.findOne({_id: id_card}, (err, card) => {
               if(err) {
                 debug(err);
-                callback(err);
+                callback('Cannot find file');
               } else {
                 card.attachments.push({
                   url: this.endpoint + relativePath,
@@ -58,7 +58,7 @@ class AttachmentsController {
                 card.save(err => {
                   if(err) {
                     debug(err);
-                    callback(err);
+                    callback('Error updating card');
                   } else {
                     callback(null);
                   }
@@ -75,7 +75,7 @@ class AttachmentsController {
     Card.findOne({_id: id_card}, (err, card) => {
       if(err) {
         debug(err);
-        callback(err);
+        callback('Cannot find card');
       } else {
         for(let i = card.attachments.length-1;i >= 0;i--) {
           if(card.attachments[i]._id.toString() === id_attachment) {
@@ -85,6 +85,7 @@ class AttachmentsController {
             card.save(err => {
               if(err) {
                 debug(err);
+                callback('Cannot update card');
               } else {
                 let filePath = path.join(__dirname.replace('controllers', 'public'), relativePath);
 

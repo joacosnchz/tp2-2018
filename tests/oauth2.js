@@ -57,8 +57,6 @@ describe('OAuth2 Tests', () => {
       assert.equal(findOneFake.callCount, 1);
       assert.equal(saveFake.callCount, 1);
       done();
-    }).catch(err => {
-      console.log(err);
     });
   });
 
